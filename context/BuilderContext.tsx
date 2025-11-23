@@ -8,7 +8,7 @@ interface BuilderContextType {
   elements: BuilderElement[];
   addElement: (type: ElementType, position: ElementPosition) => void;
   removeElement: (id: string) => void;
-  updateElement: (id: string, updates: Partial<BuilderElement>) => void; //  Genel güncelleme fonksiyonu
+  updateElement: (id: string, updates: Partial<BuilderElement>) => void;
   selectedElement: string | null;
   setSelectedElement: (id: string | null) => void;
 }
@@ -22,7 +22,10 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
   const addElement = (type: ElementType, position: ElementPosition) => {
     const newId = `elem_${type}_${Date.now()}`;
 
-    let defaultSize = { width: 200, height: 100 };
+    // --- DÜZELTME BURADA ---
+    // TypeScript'e diyoruz ki: "Bu genişlik ve yükseklik sayı da olabilir, yazı da (örneğin '100%') olabilir."
+    let defaultSize: { width: string | number; height: string | number } = { width: 200, height: 100 };
+    
     if (type === 'card') defaultSize = { width: 300, height: 200 };
     if (type === 'header') defaultSize = { width: '100%', height: 80 };
     if (type === 'footer') defaultSize = { width: '100%', height: 60 };
@@ -53,7 +56,6 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
     if (selectedElement === id) setSelectedElement(null);
   };
 
-  //  Her türlü güncellemeyi yapan fonksiyon
   const updateElement = (id: string, updates: Partial<BuilderElement>) => {
     setElements((prev) =>
       prev.map((el) => (el.id === id ? { ...el, ...updates } : el))
