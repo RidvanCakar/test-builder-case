@@ -5,7 +5,6 @@ import { useBuilder } from '../context/BuilderContext';
 export default function PropertiesPanel() {
   const { selectedElement, elements, updateElement, removeElement } = useBuilder();
 
-  // Seçili elementi bul
   const element = elements.find((el) => el.id === selectedElement);
 
   if (!element) {
@@ -18,11 +17,7 @@ export default function PropertiesPanel() {
     );
   }
 
-  // Input değiştiğinde çalışacak
   const handleChange = (field: string, value: any, isPosition = false, isContent = false) => {
-    // DÜZELTME: Eğer değer sadece sayıdan oluşuyorsa (örn "300"), bunu Number türüne çeviriyoruz.
-    // Böylece React bunu "300px" olarak algılayıp css'i düzeltecek.
-    // Ama "100%" gibi değerler gelirse string olarak kalacak.
     let finalValue = value;
     if (isPosition && !isNaN(Number(value)) && value !== '') {
         finalValue = Number(value);
@@ -39,8 +34,27 @@ export default function PropertiesPanel() {
     }
   };
 
+  // --- YENİ: Z-INDEX FONKSİYONLARI (TC-004) ---
+  const handleBringToFront = () => {
+    // Mevcut en yüksek z-index'i bul ve +1 ekle
+    const maxZ = Math.max(...elements.map((el) => el.position.zIndex), 0);
+    updateElement(element.id, {
+      position: { ...element.position, zIndex: maxZ + 1 }
+    });
+  };
+
+  const handleSendToBack = () => {
+    // Mevcut en düşük z-index'i bul ve -1 çıkar (ama 0'ın altına düşmesin opsiyonel)
+    const minZ = Math.min(...elements.map((el) => el.position.zIndex), 1);
+    const newZ = minZ > 1 ? minZ - 1 : 1; // En az 1 olsun
+    updateElement(element.id, {
+      position: { ...element.position, zIndex: newZ }
+    });
+  };
+  // --------------------------------------------
+
   return (
-    <div className="w-72 bg-white border-l border-gray-200 h-screen p-4 overflow-y-auto shadow-xl z-50">
+    <div className="w-72 bg-white border-l border-gray-200 h-screen p-4 overflow-y-auto shadow-xl z-50 flex flex-col">
       <div className="flex justify-between items-center mb-6 pb-4 border-b">
         <h2 className="font-bold text-gray-800">Özellikler</h2>
         <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded uppercase">
@@ -48,9 +62,9 @@ export default function PropertiesPanel() {
         </span>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-6 flex-1">
         
-        {/* İçerik Düzenleme */}
+        {/* İçerik */}
         <div className="space-y-3">
             <label className="text-xs font-semibold text-gray-500 uppercase">İçerik</label>
             
@@ -101,8 +115,8 @@ export default function PropertiesPanel() {
               <span className="text-xs text-gray-400">Y</span>
               <input
                 type="number"
-                value={element.position.y} // DÜZELTME: readOnly kalktı
-                onChange={(e) => handleChange('y', e.target.value, true)} // onChange eklendi
+                value={element.position.y}
+                onChange={(e) => handleChange('y', e.target.value, true)}
                 className="w-full p-2 border rounded text-sm"
               />
             </div>
@@ -127,12 +141,34 @@ export default function PropertiesPanel() {
           </div>
         </div>
 
+        {/* YENİ: Katman (Z-Index) Yönetimi */}
+        <div className="space-y-3 pt-4 border-t">
+            <label className="text-xs font-semibold text-gray-500 uppercase">Katman Sırası (Z-Index)</label>
+            <div className="flex gap-2">
+                <button 
+                    onClick={handleSendToBack}
+                    className="flex-1 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs rounded transition-colors"
+                >
+                    Arkaya Gönder
+                </button>
+                <button 
+                    onClick={handleBringToFront}
+                    className="flex-1 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs rounded transition-colors"
+                >
+                    Öne Getir
+                </button>
+            </div>
+             <div className="text-center text-xs text-gray-400 mt-1">
+                Mevcut Z-Index: {element.position.zIndex}
+            </div>
+        </div>
+
         {/* Silme Butonu */}
         <button
           onClick={() => removeElement(element.id)}
-          className="w-full py-2 bg-red-50 text-red-600 border border-red-200 rounded hover:bg-red-100 transition-colors text-sm font-medium mt-8"
+          className="w-full py-2 bg-red-50 text-red-600 border border-red-200 rounded hover:bg-red-100 transition-colors text-sm font-medium mt-4"
         >
-          Elementi Sil
+          Elementi Sil (Delete Tuşu)
         </button>
 
       </div>

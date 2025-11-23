@@ -25,7 +25,7 @@ export default function Sidebar() {
           key={item.type}
           draggable
           onDragStart={(e) => handleDragStart(e, item.type)}
-          className="p-4 bg-white border border-gray-200 rounded shadow-sm cursor-grab active:cursor-grabbing hover:shadow-md transition-all flex items-center gap-3"
+          className="p-4 bg-white border border-gray-200 rounded shadow-sm cursor-grab active:cursor-grabbing active:opacity-50 hover:shadow-md transition-all flex items-center gap-3"
         >
           <span className="text-xl">{item.icon}</span>
           <span className="font-medium text-gray-600">{item.label}</span>
