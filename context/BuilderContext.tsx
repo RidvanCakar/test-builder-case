@@ -8,7 +8,7 @@ interface BuilderContextType {
   elements: BuilderElement[];
   addElement: (type: ElementType, position: ElementPosition) => void;
   removeElement: (id: string) => void;
-  updateElement: (id: string, updates: Partial<BuilderElement>) => void; // YENİ: Genel güncelleme fonksiyonu
+  updateElement: (id: string, updates: Partial<BuilderElement>) => void; //  Genel güncelleme fonksiyonu
   selectedElement: string | null;
   setSelectedElement: (id: string | null) => void;
 }
@@ -53,7 +53,7 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
     if (selectedElement === id) setSelectedElement(null);
   };
 
-  // YENİ: Her türlü güncellemeyi yapan fonksiyon
+  //  Her türlü güncellemeyi yapan fonksiyon
   const updateElement = (id: string, updates: Partial<BuilderElement>) => {
     setElements((prev) =>
       prev.map((el) => (el.id === id ? { ...el, ...updates } : el))
@@ -66,7 +66,7 @@ export function BuilderProvider({ children }: { children: ReactNode }) {
         elements,
         addElement,
         removeElement,
-        updateElement, // updateElementPosition yerine bunu kullanacağız
+        updateElement, 
         selectedElement,
         setSelectedElement,
       }}

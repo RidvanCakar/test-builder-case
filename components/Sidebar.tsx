@@ -12,7 +12,6 @@ export default function Sidebar() {
   ];
 
   const handleDragStart = (e: React.DragEvent, type: ElementType) => {
-    // PDF TC-001: Element datası dataTransfer'a eklenmeli [cite: 9]
     e.dataTransfer.setData('elementType', type);
     e.dataTransfer.effectAllowed = 'copy'; // Cursor 'copy' ikonu göstersin
   };

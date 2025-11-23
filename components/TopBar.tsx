@@ -7,7 +7,6 @@ export default function TopBar() {
   const { elements } = useBuilder();
 
   const handleExport = () => {
-    // PDF TC-005 Formatına Uygun Veri Yapısı
     const exportData: BuilderData = {
       project: {
         name: "Test Builder Project",

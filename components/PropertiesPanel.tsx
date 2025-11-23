@@ -62,11 +62,11 @@ export default function PropertiesPanel() {
 
       <div className="space-y-6 flex-1">
         
-        {/* --- İÇERİK DÜZENLEME --- */}
+        {/* --- İÇERİK DÜZENLEME KISSMI --- */}
         <div className="space-y-3">
             <label className="text-xs font-semibold text-gray-500 uppercase">İçerik</label>
             
-            {/* Metin Alanı */}
+            {/* Metin Alanı */}  
             {(element.type === 'text-content' || element.type === 'header' || element.type === 'footer' || element.type === 'slider') && (
                 <div className="space-y-1">
                     <span className="text-xs text-gray-400">Yazı İçeriği</span>
@@ -80,7 +80,7 @@ export default function PropertiesPanel() {
                 </div>
             )}
 
-            {/* RESİM URL ALANI (Card ve Slider) */}
+            {/* RESİM URL ALANI (Card ve Slider için) */}
             {(element.type === 'card' || element.type === 'slider') && (
                 <div className="space-y-2 pt-2">
                     <span className="text-xs text-gray-400">Görsel URL (Link)</span>

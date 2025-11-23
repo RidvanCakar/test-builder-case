@@ -35,7 +35,7 @@ export default function Canvas() {
     initialHeight: 0,
   });
 
-  // --- KLAVYE (DELETE) ---
+  // --- KLAVYE İLE SİLME ---
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
@@ -54,9 +54,7 @@ export default function Canvas() {
 
     setSelectedElement(id);
 
-    // --- DÜZELTME BAŞLANGICI ---
-    // Elementin genişliği "100%" (string) ise bunu piksele çeviriyoruz
-    // Böylece matematik işlemi NaN (Sayı Değil) hatası vermiyor.
+    // Elementin genişliği "100%" (string) ise bunu piksele çeviriyor
     let currentPixelWidth = 0;
     
     if (typeof element.position.width === 'number') {
@@ -73,7 +71,6 @@ export default function Canvas() {
             }
         }
     }
-    // --- DÜZELTME BİTİŞİ ---
 
     setInteraction({
       mode,
@@ -87,7 +84,7 @@ export default function Canvas() {
     });
   };
 
-  // --- MOUSE MOVE (GLOBAL) ---
+  // --- MOUSE HAREKETİ  ---
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!interaction.mode || !interaction.elementId) return;
 
@@ -178,7 +175,7 @@ export default function Canvas() {
                 e.stopPropagation();
                 setSelectedElement(el.id);
             }}
-            // YENİ: Mouse olaylarını Canvas'a bildiriyoruz
+            // YENİ: Mouse olaylarını Canvas'a BİLDİR
             onDragStart={(e) => handleInteractionStart(e, el.id, 'drag')}
             onResizeStart={(e) => handleInteractionStart(e, el.id, 'resize')}
           />

@@ -6,7 +6,7 @@ interface RenderElementProps {
   element: BuilderElement;
   isSelected: boolean;
   onSelect: (e: React.MouseEvent) => void;
-  // Mouse olaylarını yukarı taşımak için prop'lar
+  // Mouse olaylarını yukarı taşımak için prop
   onDragStart: (e: React.MouseEvent) => void;
   onResizeStart: (e: React.MouseEvent) => void;
 }
@@ -37,7 +37,7 @@ export default function RenderElement({
     width: element.position.width,
     height: element.position.height,
     zIndex: element.position.zIndex,
-    transition: 'none', // Mouse ile sürüklerken akıcı olması için animasyonu kapattık
+    transition: 'none', // Mouse ile sürüklerken akıcı olması için animasyonu kapalı
   };
 
   const renderContent = () => {
@@ -46,11 +46,6 @@ export default function RenderElement({
         return (
           <div className="w-full h-full bg-slate-800 text-white flex items-center justify-between px-8 shadow-md overflow-hidden">
             <span className="font-bold text-xl">{element.content.text || 'Logo'}</span>
-            <nav className="space-x-4 text-sm">
-              <span>Home</span>
-              <span>About</span>
-              <span>Contact</span>
-            </nav>
           </div>
         );
       

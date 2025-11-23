@@ -41,7 +41,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* FOOTER: İMZA ALANI */}
+      {/* FOOTER */}
       <footer className="w-full text-center py-4 border-t border-gray-800 mt-8">
         <p className="text-gray-500 text-sm">
           Rıdvan Çakar tarafından tasarlandı 2025
