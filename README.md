@@ -19,5 +19,8 @@ position them on a canvas and export the layout as JSON.
 - TypeScript
 - Tailwind CSS
 
+![App Screenshot 1](./public/screenshots/image0.png)
+![App Screenshot 2](./public/screenshots/image1.png)
+
 ## Author
 Ridvan Cakar
