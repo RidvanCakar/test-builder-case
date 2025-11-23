@@ -3,8 +3,7 @@
 import Sidebar from "../../components/Sidebar";
 import Canvas from "../../components/Canvas";
 import PropertiesPanel from "../../components/PropertiesPanel";
-import TopBar from "../../components/TopBar"; // Yeni bileşen
-
+import TopBar from "../../components/TopBar"; 
 export default function BuilderPage() {
   return (
     <div className="flex flex-col h-screen w-full overflow-hidden">

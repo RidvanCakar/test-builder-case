@@ -6,7 +6,7 @@ interface RenderElementProps {
   element: BuilderElement;
   isSelected: boolean;
   onSelect: (e: React.MouseEvent) => void;
-  // YENİ: Mouse olaylarını yukarı taşımak için prop'lar
+  // Mouse olaylarını yukarı taşımak için prop'lar
   onDragStart: (e: React.MouseEvent) => void;
   onResizeStart: (e: React.MouseEvent) => void;
 }
@@ -15,11 +15,11 @@ export default function RenderElement({
   element, 
   isSelected, 
   onSelect,
-  onDragStart,   // YENİ
-  onResizeStart  // YENİ
+  onDragStart, 
+  onResizeStart
 }: RenderElementProps) {
 
-  // ÇAKIŞMA KONTROLÜ (Sidebar'dan gelenler için)
+  // ÇAKIŞMA KONTROLÜ
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -37,7 +37,7 @@ export default function RenderElement({
     width: element.position.width,
     height: element.position.height,
     zIndex: element.position.zIndex,
-    transition: 'none', // Mouse ile sürüklerken gecikme olmasın diye animasyonu kapattık
+    transition: 'none', // Mouse ile sürüklerken akıcı olması için animasyonu kapattık
   };
 
   const renderContent = () => {
@@ -64,14 +64,42 @@ export default function RenderElement({
       case 'card':
         return (
           <div className="w-full h-full bg-white shadow-lg rounded-lg overflow-hidden flex flex-col">
-            <div className="h-32 bg-gray-200 flex items-center justify-center text-gray-400 flex-shrink-0">
-              Image Area
-            </div>
+            {/* RESİM VARSA GÖSTER, YOKSA GRİ KUTU */}
+            {element.content.image ? (
+                <img 
+                    src={element.content.image} 
+                    alt="Card" 
+                    className="h-32 w-full object-cover pointer-events-none" 
+                />
+            ) : (
+                <div className="h-32 bg-gray-200 flex items-center justify-center text-gray-400 flex-shrink-0">
+                    Image Area
+                </div>
+            )}
             <div className="p-4 overflow-hidden">
               <h3 className="font-bold text-gray-800 mb-2">{element.content.title || 'Card Title'}</h3>
               <p className="text-gray-500 text-xs">{element.content.description || 'Description...'}</p>
             </div>
           </div>
+        );
+
+      case 'slider':
+        return (
+            <div className="w-full h-full bg-gray-800 relative flex items-center justify-center overflow-hidden">
+                {/* SLIDER RESMİ ARKA PLAN */}
+                {element.content.image ? (
+                    <img 
+                        src={element.content.image} 
+                        alt="Slider" 
+                        className="w-full h-full object-cover pointer-events-none absolute inset-0" 
+                    />
+                ) : (
+                    <div className="text-white opacity-50">Slider Image Placeholder</div>
+                )}
+                <h2 className="text-3xl font-bold text-white z-10 drop-shadow-md pointer-events-none">
+                    {element.content.text || 'Slider Başlığı'}
+                </h2>
+            </div>
         );
 
       case 'text-content':
@@ -92,18 +120,18 @@ export default function RenderElement({
     <div
       onClick={onSelect}
       onDragOver={handleDragOver}
-      onMouseDown={onDragStart} // YENİ: Mouse basılınca sürüklemeyi başlat
+      onMouseDown={onDragStart} // Taşıma Başlat
       style={commonStyle}
       className={`cursor-move select-none ${borderStyle}`}
     >
       {renderContent()}
       
+      {/* Seçiliyse Boyutlandırma Tutamacını Göster */}
       {isSelected && (
         <div 
-            // YENİ: Resize Handle (Sağ alt köşe)
             onMouseDown={(e) => {
-                e.stopPropagation(); // Sürüklemeyi tetikleme, sadece resize yap
-                onResizeStart(e);
+                e.stopPropagation();
+                onResizeStart(e); // Boyutlandırma Başlat
             }}
             className="absolute bottom-0 right-0 w-5 h-5 bg-blue-500 cursor-se-resize rounded-tl flex items-center justify-center z-[60]"
         >

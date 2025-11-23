@@ -19,6 +19,7 @@ export default function PropertiesPanel() {
 
   const handleChange = (field: string, value: any, isPosition = false, isContent = false) => {
     let finalValue = value;
+    // Sayısal değer kontrolü
     if (isPosition && !isNaN(Number(value)) && value !== '') {
         finalValue = Number(value);
     }
@@ -34,9 +35,8 @@ export default function PropertiesPanel() {
     }
   };
 
-  // --- YENİ: Z-INDEX FONKSİYONLARI (TC-004) ---
+  // --- KATMAN (Z-INDEX) YÖNETİMİ ---
   const handleBringToFront = () => {
-    // Mevcut en yüksek z-index'i bul ve +1 ekle
     const maxZ = Math.max(...elements.map((el) => el.position.zIndex), 0);
     updateElement(element.id, {
       position: { ...element.position, zIndex: maxZ + 1 }
@@ -44,14 +44,12 @@ export default function PropertiesPanel() {
   };
 
   const handleSendToBack = () => {
-    // Mevcut en düşük z-index'i bul ve -1 çıkar (ama 0'ın altına düşmesin opsiyonel)
     const minZ = Math.min(...elements.map((el) => el.position.zIndex), 1);
-    const newZ = minZ > 1 ? minZ - 1 : 1; // En az 1 olsun
+    const newZ = minZ > 1 ? minZ - 1 : 1;
     updateElement(element.id, {
       position: { ...element.position, zIndex: newZ }
     });
   };
-  // --------------------------------------------
 
   return (
     <div className="w-72 bg-white border-l border-gray-200 h-screen p-4 overflow-y-auto shadow-xl z-50 flex flex-col">
@@ -64,41 +62,67 @@ export default function PropertiesPanel() {
 
       <div className="space-y-6 flex-1">
         
-        {/* İçerik */}
+        {/* --- İÇERİK DÜZENLEME --- */}
         <div className="space-y-3">
             <label className="text-xs font-semibold text-gray-500 uppercase">İçerik</label>
             
-            {(element.type === 'text-content' || element.type === 'header') && (
-                <input
-                type="text"
-                value={element.content.text || ''}
-                onChange={(e) => handleChange('text', e.target.value, false, true)}
-                className="w-full p-2 border rounded text-sm"
-                placeholder="Metin giriniz"
-                />
+            {/* Metin Alanı */}
+            {(element.type === 'text-content' || element.type === 'header' || element.type === 'footer' || element.type === 'slider') && (
+                <div className="space-y-1">
+                    <span className="text-xs text-gray-400">Yazı İçeriği</span>
+                    <input
+                        type="text"
+                        value={element.content.text || ''}
+                        onChange={(e) => handleChange('text', e.target.value, false, true)}
+                        className="w-full p-2 border rounded text-sm"
+                        placeholder="Metin giriniz"
+                    />
+                </div>
             )}
 
+            {/* RESİM URL ALANI (Card ve Slider) */}
+            {(element.type === 'card' || element.type === 'slider') && (
+                <div className="space-y-2 pt-2">
+                    <span className="text-xs text-gray-400">Görsel URL (Link)</span>
+                    <input
+                        type="text"
+                        value={element.content.image || ''}
+                        onChange={(e) => handleChange('image', e.target.value, false, true)}
+                        className="w-full p-2 border rounded text-sm bg-gray-50"
+                        placeholder="https://ornek.com/resim.jpg"
+                    />
+                    <p className="text-[10px] text-gray-400">Not: .jpg, .png gibi doğrudan resim linki girin.</p>
+                </div>
+            )}
+
+            {/* Card Özel Alanları */}
             {element.type === 'card' && (
                 <>
-                    <input
-                    type="text"
-                    value={element.content.title || ''}
-                    onChange={(e) => handleChange('title', e.target.value, false, true)}
-                    className="w-full p-2 border rounded text-sm mb-2"
-                    placeholder="Başlık"
-                    />
-                    <textarea
-                    value={element.content.description || ''}
-                    onChange={(e) => handleChange('description', e.target.value, false, true)}
-                    className="w-full p-2 border rounded text-sm"
-                    placeholder="Açıklama"
-                    rows={3}
-                    />
+                    <div className="space-y-1 pt-2">
+                        <span className="text-xs text-gray-400">Kart Başlığı</span>
+                        <input
+                            type="text"
+                            value={element.content.title || ''}
+                            onChange={(e) => handleChange('title', e.target.value, false, true)}
+                            className="w-full p-2 border rounded text-sm"
+                            placeholder="Başlık"
+                        />
+                    </div>
+                    <div className="space-y-1">
+                        <span className="text-xs text-gray-400">Açıklama</span>
+                        <textarea
+                            value={element.content.description || ''}
+                            onChange={(e) => handleChange('description', e.target.value, false, true)}
+                            className="w-full p-2 border rounded text-sm"
+                            placeholder="Açıklama"
+                            rows={3}
+                        />
+                    </div>
                 </>
             )}
         </div>
 
-        {/* Boyut ve Konum */}
+        {/* --- BOYUT VE KONUM --- */}
         <div className="space-y-3">
           <label className="text-xs font-semibold text-gray-500 uppercase">Boyut & Konum</label>
           <div className="grid grid-cols-2 gap-2">
@@ -141,9 +165,9 @@ export default function PropertiesPanel() {
           </div>
         </div>
 
-        {/* YENİ: Katman (Z-Index) Yönetimi */}
+        {/* --- KATMAN YÖNETİMİ --- */}
         <div className="space-y-3 pt-4 border-t">
-            <label className="text-xs font-semibold text-gray-500 uppercase">Katman Sırası (Z-Index)</label>
+            <label className="text-xs font-semibold text-gray-500 uppercase">Katman (Z-Index)</label>
             <div className="flex gap-2">
                 <button 
                     onClick={handleSendToBack}
@@ -159,16 +183,16 @@ export default function PropertiesPanel() {
                 </button>
             </div>
              <div className="text-center text-xs text-gray-400 mt-1">
-                Mevcut Z-Index: {element.position.zIndex}
+                Mevcut Değer: {element.position.zIndex}
             </div>
         </div>
 
-        {/* Silme Butonu */}
+        {/* --- SİLME BUTONU --- */}
         <button
           onClick={() => removeElement(element.id)}
           className="w-full py-2 bg-red-50 text-red-600 border border-red-200 rounded hover:bg-red-100 transition-colors text-sm font-medium mt-4"
         >
-          Elementi Sil (Delete Tuşu)
+          Elementi Sil
         </button>
 
       </div>
