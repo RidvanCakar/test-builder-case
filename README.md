@@ -19,8 +19,11 @@ position them on a canvas and export the layout as JSON.
 - TypeScript
 - Tailwind CSS
 
-![App Screenshot 1](./public/screenshots/image0.png)
-![App Screenshot 2](./public/screenshots/image1.png)
+<div align="center">
+  <img src="public/screenshots/image0.png" alt="App Screenshot 1" width="800" />
+  <br/><br/>
+  <img src="public/screenshots/image1.png" alt="App Screenshot 2" width="800" />
+</div>
 
 ## Author
 Ridvan Cakar
